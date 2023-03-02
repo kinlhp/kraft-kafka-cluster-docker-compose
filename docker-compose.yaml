@@ -1,0 +1,73 @@
+version: '3.8'
+networks:
+  cluster-network:
+    name: ${CLUSTER_NETWORK_NAME:?unset or empty in the environment}
+    driver: ${CLUSTER_NETWORK_DRIVER:?unset or empty in the environment}
+services:
+  node-0:
+    env_file:
+      - ./node-0.env
+    image: ${KAFKA_CONTAINER_IMAGE:?unset or empty in the environment}
+    container_name: ${NODE_0_CONTAINER_NAME:?unset or empty in the environment}
+    volumes:
+      #- ${HOME:?unset or empty in the environment}/.docker/volumes/${NODE_0_CONTAINER_NAME:?unset or empty in the environment}-data:/bitnami/kafka/data
+      - type: volume
+        source: ${NODE_0_CONTAINER_NAME:?unset or empty in the environment}-data
+        target: /bitnami/kafka/data
+    hostname: ${NODE_0_HOSTNAME:?unset or empty in the environment}
+    networks:
+      - cluster-network
+    ports:
+      - ${NODE_0_CONTROLLER_LISTENER_PORT_MAPPING:?unset or empty in the environment}
+      - ${NODE_0_PLAINTEXT_LISTENER_PORT_MAPPING:?unset or empty in the environment}
+    #command: ${NODE_0_CONTAINER_INITIAL_COMMAND:?unset or empty in the environment}
+    restart: ${CONTAINER_RESTART_POLICY:?unset or empty in the environment}
+  node-1:
+    env_file:
+      - ./node-1.env
+    image: ${KAFKA_CONTAINER_IMAGE:?unset or empty in the environment}
+    container_name: ${NODE_1_CONTAINER_NAME:?unset or empty in the environment}
+    volumes:
+      #- ${HOME:?unset or empty in the environment}/.docker/volumes/${NODE_1_CONTAINER_NAME:?unset or empty in the environment}-data:/bitnami/kafka/data
+      - type: volume
+        source: ${NODE_1_CONTAINER_NAME:?unset or empty in the environment}-data
+        target: /bitnami/kafka/data
+    hostname: ${NODE_1_HOSTNAME:?unset or empty in the environment}
+    networks:
+      - cluster-network
+    ports:
+      - ${NODE_1_CONTROLLER_LISTENER_PORT_MAPPING:?unset or empty in the environment}
+      - ${NODE_1_PLAINTEXT_LISTENER_PORT_MAPPING:?unset or empty in the environment}
+    #command: ${NODE_1_CONTAINER_INITIAL_COMMAND:?unset or empty in the environment}
+    restart: ${CONTAINER_RESTART_POLICY:?unset or empty in the environment}
+  node-2:
+    env_file:
+      - ./node-2.env
+    image: ${KAFKA_CONTAINER_IMAGE:?unset or empty in the environment}
+    container_name: ${NODE_2_CONTAINER_NAME:?unset or empty in the environment}
+    volumes:
+      #- ${HOME:?unset or empty in the environment}/.docker/volumes/${NODE_2_CONTAINER_NAME:?unset or empty in the environment}-data:/bitnami/kafka/data
+      - type: volume
+        source: ${NODE_2_CONTAINER_NAME:?unset or empty in the environment}-data
+        target: /bitnami/kafka/data
+    hostname: ${NODE_2_HOSTNAME:?unset or empty in the environment}
+    networks:
+      - cluster-network
+    ports:
+      - ${NODE_2_CONTROLLER_LISTENER_PORT_MAPPING:?unset or empty in the environment}
+      - ${NODE_2_PLAINTEXT_LISTENER_PORT_MAPPING:?unset or empty in the environment}
+    #command: ${NODE_2_CONTAINER_INITIAL_COMMAND:?unset or empty in the environment}
+    restart: ${CONTAINER_RESTART_POLICY:?unset or empty in the environment}
+volumes:
+  node-0-data:
+    labels:
+      log.dirs: kafka_base_dir
+    name: ${NODE_0_CONTAINER_NAME:?unset or empty in the environment}-data
+  node-1-data:
+    labels:
+      log.dirs: kafka_base_dir
+    name: ${NODE_1_CONTAINER_NAME:?unset or empty in the environment}-data
+  node-2-data:
+    labels:
+      log.dirs: kafka_base_dir
+    name: ${NODE_2_CONTAINER_NAME:?unset or empty in the environment}-data
